@@ -301,9 +301,9 @@ function restartAppInternal() {
       watcher.add(relativeFilename);
     }
     handleFileLoad(filename, (source, sourceMap) => {
-      const sourceBuf = new Buffer(source || 0);
-      const mapBuf = new Buffer(sourceMap ? JSON.stringify(sourceMap) : 0);
-      const lenBuf = new Buffer(4);
+      const sourceBuf = Buffer.from(source || '');
+      const mapBuf = Buffer.from(sourceMap ? JSON.stringify(sourceMap) : '');
+      const lenBuf = Buffer.alloc(4);
       if (pipeFd) {
         try {
           lenBuf.writeUInt32BE(sourceBuf.length, 0);
