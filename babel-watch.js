@@ -21,9 +21,6 @@ function collect(val, memo) {
   return memo;
 }
 
-program.option('-d, --debug [port]', 'Set debugger port')
-program.option('-B, --debug-brk', 'Enable debug break mode')
-program.option('-I, --inspect', 'Enable inspect mode')
 program.option('-o, --only [globs]', 'Matching files will be transpiled');
 program.option('-i, --ignore [globs]', 'Matching files will not be transpiled');
 program.option('-e, --extensions [extensions]', 'List of extensions to hook into [.es6,.js,.es,.jsx]');
@@ -73,6 +70,7 @@ program.on('--help', () => {
   https://github.com/kmagiera/babel-watch
   `);
 });
+program.allowUnknownOption(true);
 program.parse(process.argv);
 
 const cwd = process.cwd();
@@ -257,18 +255,21 @@ function restartAppInternal() {
     }
   }
 
-  // Support for --debug option
   const runnerExecArgv = process.execArgv.slice();
-  if (program.debug) {
-    runnerExecArgv.push('--debug=' + program.debug);
-  }
-  // Support for --inspect option
-  if (program.inspect) {
-    runnerExecArgv.push('--inspect');
-  }
-  // Support for --debug-brk
-  if(program.debugBrk) {
-    runnerExecArgv.push('--debug-brk');
+  const unknownOptions = program.parseOptions(program.normalize(process.argv.slice(2))).unknown;
+
+  if (unknownOptions.length > 0) {
+    for (let i = 0, len = unknownOptions.length; i < len; ++i) {
+      // If this unknown option is a '--' option and the next option looks like it might
+      // be an argument for this option, we format it as --option=argument and pass it on.
+      if (unknownOptions[i].indexOf('--') === 0 &&
+        unknownOptions[i + 1] &&
+        unknownOptions[i + 1].indexOf('-') !== 0) {
+        runnerExecArgv.push(unknownOptions[i] + '=' + unknownOptions[++i]);
+      } else {
+        runnerExecArgv.push(unknownOptions[i]);
+      }
+    }
   }
 
   const app = fork(path.resolve(__dirname, 'runner.js'), { execArgv: runnerExecArgv });
