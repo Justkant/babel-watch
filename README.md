@@ -1,8 +1,6 @@
-# Looking for maintainer
+# @kant/babel-watch
 
-As I've stopped using this project some time ago I'd be happy to onboard new person who would be responsible for evaluating, merging PRs and publishing new releases. If you would like to be such a person and help this community get what they deserve join our discussion here: https://github.com/kmagiera/babel-watch/issues/71
-
-# babel-watch
+This is a fork of [`babel-watch`](https://github.com/kmagiera/babel-watch)
 
 Reload your babel-node app on JS source file changes. And do it *fast*.
 
@@ -24,12 +22,12 @@ Just install it and add to your package:
 
 With NPM:
 ```bash
-  npm install --save-dev babel-watch
+  npm install --save-dev @kant/babel-watch
 ```
 
 With Yarn:
 ```bash
-  yarn add --dev babel-watch
+  yarn add --dev @kant/babel-watch
 ```
 
 (Make sure you have `babel-core` installed as dependency in your project as `babel-watch` only defines `babel-core` as a "peerDependency")
@@ -61,7 +59,7 @@ Then use `babel-watch` in your `package.json` in scripts section like this:
 
 Unknown options will be passed to node process.
 
-While the `babel-watch` process is running you may type "rs" and hit return in the terminal to force reload the app.
+While the `babel-watch` process is running you may type `rs` and hit return in the terminal to force reload the app.
 
 ### Example usage:
 
