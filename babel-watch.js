@@ -27,6 +27,7 @@ program.option('-e, --extensions [extensions]', 'List of extensions to hook into
 program.option('-p, --plugins [string]', '', babel.util.list);
 program.option('-b, --presets [string]', '', babel.util.list);
 program.option('-w, --watch [dir]', 'Watch directory "dir" or files. Use once for each directory or file to watch', collect, []);
+program.option('--delay <n>', 'The amount of time in milliseconds to wait before emitting an "update" event after a change. default: 100', parseInt);
 program.option('-x, --exclude [dir]', 'Exclude matching directory/files from watcher. Use once for each directory or file.', collect, []);
 program.option('-L, --use-polling', 'In some filesystems watch events may not work correcly. This option enables "polling" which should mitigate this type of issues');
 program.option('-D, --disable-autowatch', 'Don\'t automatically start watching changes in files "required" by the program');
@@ -140,7 +141,7 @@ const stdin = process.stdin;
 stdin.setEncoding('utf8');
 stdin.on('data', (data) => {
   if (String(data).trim() === RESTART_COMMAND) {
-    restartApp();
+    restartAppImmediate();
   }
 });
 
@@ -240,7 +241,7 @@ function prepareRestart() {
   }
 }
 
-function restartApp() {
+function restartAppImmediate() {
   if (!watcherInitialized) return;
   prepareRestart();
 }
@@ -332,6 +333,18 @@ function restartAppInternal() {
   });
   pipeFd = fs.openSync(pipeFilename, 'w');
   childApp = app;
+}
+
+const delay = program.delay || 100;
+let timeout;
+function restartApp() {
+  if (timeout) {
+    clearTimeout(timeout);
+  }
+  timeout = setTimeout(() => {
+    timeout = null;
+    restartAppImmediate();
+  }, delay);
 }
 
 function shouldIgnore(filename) {
