@@ -1,6 +1,6 @@
 {
   "name": "@kant/babel-watch",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Reload your babel-node app on JS source file changes. And do it *fast*.",
   "main": "babel-watch.js",
   "scripts": {
