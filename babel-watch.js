@@ -41,8 +41,8 @@ function arrayify(val) {
 program.option('-o, --only [globs]', 'Matching files will be transpiled');
 program.option('-i, --ignore [globs]', 'Matching files will not be transpiled');
 program.option('-e, --extensions [extensions]', 'List of extensions to hook into [.es6,.js,.es,.jsx]');
-program.option('-p, --plugins [string]', '', babel.util.list);
-program.option('-b, --presets [string]', '', babel.util.list);
+program.option('-p, --plugins [string]', '');
+program.option('-b, --presets [string]', '');
 program.option('-w, --watch [dir]', 'Watch directory "dir" or files. Use once for each directory or file to watch', collect, []);
 program.option('--delay <n>', 'The amount of time in milliseconds to wait before emitting an "update" event after a change. default: 100', parseInt);
 program.option('-x, --exclude [dir]', 'Exclude matching directory/files from watcher. Use once for each directory or file.', collect, []);
